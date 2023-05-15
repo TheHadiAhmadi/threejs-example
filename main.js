@@ -139,9 +139,9 @@ onInit(({ scene, camera, renderer }) => {
 
 // Ground
 onInit(async ({ scene }) => {
-
   const light = new THREE.AmbientLight(0xffffff, 0.5);
   scene.add(light);
+  scene.background = new THREE.Color(0xf0f0f0);
 
   const ground = createBox(25, 0.01, 25);
   // ground.material.color = new THREE.Color(0x404040);
@@ -163,7 +163,12 @@ onInit(async ({ scene }) => {
 
 // initialize
 onInit(({ camera }) => {
-  camera.position.z = -20;
+  camera.position.set(19, 3, -1);
+
+  // onKeyDown("r", () => {
+  //   console.log(camera.position);
+  //   console.log(camera.rotation);
+  // });
 
   document.querySelectorAll(".color").forEach((el) => {
     const color = el.getAttribute("data-color");
