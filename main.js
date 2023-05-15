@@ -60,7 +60,7 @@ function setCarColor(color, isMatte) {
       if (isMatte) {
         object.material.metalness = 0;
       } else {
-        object.material.metalness = 1;
+        object.material.metalness = 0.2;
       }
       object.material.color.set(color);
     }
@@ -102,29 +102,6 @@ onInit(({ scene }) => {
   dirLight.shadow.blurSamples = 30;
   dirLight.shadow.radius = 8;
 
-  onKeyHold("w", () => {
-    dirLight.position.x += 1;
-  });
-  onKeyHold("s", () => {
-    dirLight.position.x -= 1;
-  });
-  onKeyHold("q", () => {
-    dirLight.position.y += 1;
-  });
-  onKeyHold("e", () => {
-    dirLight.position.y -= 1;
-  });
-  onKeyHold("r", () => {
-    dirLight.position.z += 1;
-  });
-  onKeyHold("f", () => {
-    dirLight.position.z -= 1;
-  });
-
-  onKeyDown("d", () => {
-    console.log(dirLight.position);
-  });
-
   // scene.add(new THREE.CameraHelper(dirLight.shadow.camera));
   scene.add(dirLight);
 });
@@ -141,7 +118,8 @@ onInit(({ scene, camera, renderer }) => {
       obj.castShadow = true;
       // }
       if (obj.material) {
-        // obj.material.metalness /= 4;
+        obj.material.metalness /= 4;
+
         if (obj.material.color) {
           if (obj.material.color.getHex() === 13421772) {
             obj.userData.isBody = true;
@@ -161,18 +139,9 @@ onInit(({ scene, camera, renderer }) => {
 
 // Ground
 onInit(async ({ scene }) => {
-  const hdrLoader = new RGBELoader();
-  const envMap = hdrLoader.load("/blouberg_sunrise_2_1k.hdr", (envmap) => {
-    envMap.mapping = THREE.EquirectangularReflectionMapping;
 
-    const skybox = new GroundProjectedSkybox(envMap);
-    console.log(skybox);
-
-    skybox.scale.setScalar(100);
-    scene.add(skybox);
-
-    scene.environment = envMap;
-  });
+  const light = new THREE.AmbientLight(0xffffff, 0.5);
+  scene.add(light);
 
   const ground = createBox(25, 0.01, 25);
   // ground.material.color = new THREE.Color(0x404040);
