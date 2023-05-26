@@ -5,12 +5,17 @@ let camera;
 let renderer;
 
 let updateCallbacks = [];
+let initCallbacks = [];
 export function onUpdate(cb) {
   updateCallbacks.push(cb);
 }
 
 export function onInit(cb) {
-  cb({ scene, camera, renderer });
+  if (scene) {
+    cb({ scene, camera, renderer });
+  } else {
+    initCallbacks.push(cb);
+  }
 }
 
 export function init(element) {
@@ -29,6 +34,8 @@ export function init(element) {
 
   renderer.shadowMap.enabled = true;
   renderer.setSize(window.innerWidth, window.innerHeight);
+
+  initCallbacks.map((cb) => cb({ scene, camera, renderer }));
 
   function animate() {
     updateCallbacks.map((cb) => cb());
