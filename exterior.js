@@ -26,10 +26,10 @@ onInit(({ camera, renderer }) => {
   controls.enableDamping = true; // an animation loop is required when either damping or auto-rotation are enabled
   controls.dampingFactor = 0.1;
   controls.screenSpacePanning = true;
-  controls.minDistance = 10;
-  controls.maxDistance = 50;
-  controls.minPolarAngle = (0.4 * Math.PI) / 2;
-  controls.maxPolarAngle = (0.9 * Math.PI) / 2;
+  // controls.minDistance = 10;
+  // controls.maxDistance = 50;
+  // controls.minPolarAngle = (0.4 * Math.PI) / 2;
+  // controls.maxPolarAngle = (0.9 * Math.PI) / 2;
   // controls.enableZoom = false;
 
   onUpdate(controls.update);
@@ -37,8 +37,9 @@ onInit(({ camera, renderer }) => {
 
 // Lights
 onInit(({ scene }) => {
+  scene.add(new THREE.AmbientLight(0xffffff, 3))
   const dirLight = new THREE.DirectionalLight(0xffffff, 0.5);
-  dirLight.position.y = 40;
+  dirLight.position.y = 400;
   dirLight.position.x = 10;
   dirLight.position.z = 12;
 
@@ -66,6 +67,8 @@ onInit(({ scene, camera, renderer }) => {
   new FBXLoader().load(
     "/IK_SB_24MY_STD_TOP_EXT_20230503.FBX",
     (model) => {
+      // console.log(model)
+      scene.add(model)
       console.log("loaded");
       // console.log(model);
     },
@@ -127,7 +130,7 @@ onInit(async ({ scene }) => {
 
 // initialize
 onInit(({ camera }) => {
-  camera.position.set(19, 3, -1);
+  camera.position.set(190, 3, -1);
 
   // onKeyDown("r", () => {
   //   console.log(camera.position);
