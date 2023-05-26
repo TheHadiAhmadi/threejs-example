@@ -170,13 +170,17 @@ onInit(async ({ scene }) => {
   // const envmap = new THREE.TextureLoader().load("/istockphoto-3.jpg");
   // console.log(envmap);
 
-  // const envmap = new THREE.TextureLoader().load("/istock1.jpg");
+  const envmap = new THREE.TextureLoader().load("/istock1.jpg");
   // const envmap = new THREE.TextureLoader().load("/istock2.jpg");
   // const envmap = new THREE.TextureLoader().load("/istock3.jpg");
-  const envmap = new THREE.TextureLoader().load("/gettyimages-1.jpg");
+  // const envmap = new THREE.TextureLoader().load("/gettyimages-1.jpg");
   envmap.mapping = THREE.EquirectangularReflectionMapping;
-  scene.background = envmap;
+  // envmap.
+  // scene.background = envmap;
 
+  let skybox = new GroundProjectedSkybox(envmap);
+  skybox.scale.setScalar(100);
+  scene.add(skybox);
   // console.log(envmap);
   // /
   // const skybox = new GroundProjectedSkybox(envMap);
@@ -203,7 +207,7 @@ onInit(async ({ scene }) => {
     ground.material.map = texture;
   });
 
-  scene.add(ground);
+  // scene.add(ground);
 });
 
 // initialize
