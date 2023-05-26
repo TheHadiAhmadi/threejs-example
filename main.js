@@ -161,18 +161,32 @@ onInit(({ scene, camera, renderer }) => {
 
 // Ground
 onInit(async ({ scene }) => {
-  const hdrLoader = new RGBELoader();
-  const envMap = hdrLoader.load("/blouberg_sunrise_2_1k.hdr", (envmap) => {
-    envMap.mapping = THREE.EquirectangularReflectionMapping;
+  // const hdrLoader = new RGBELoader();
+  // const envMap = hdrLoader.load("/blouberg_sunrise_2_1k.hdr", (envmap) => {
+  //   envMap.mapping = THREE.EquirectangularReflectionMapping;
+  // const exrLoader = new RGBELoader();
+  // const envMap = exrLoader.load("/piz_compressed.exr", (envmap) => {
+  // const envMap = exrLoader.load("/lake_pier_4k.hdr", (envmap) => {
+  // const envmap = new THREE.TextureLoader().load("/istockphoto-3.jpg");
+  // console.log(envmap);
 
-    const skybox = new GroundProjectedSkybox(envMap);
-    console.log(skybox);
+  // const envmap = new THREE.TextureLoader().load("/istock1.jpg");
+  // const envmap = new THREE.TextureLoader().load("/istock2.jpg");
+  // const envmap = new THREE.TextureLoader().load("/istock3.jpg");
+  const envmap = new THREE.TextureLoader().load("/gettyimages-1.jpg");
+  envmap.mapping = THREE.EquirectangularReflectionMapping;
+  scene.background = envmap;
 
-    skybox.scale.setScalar(100);
-    scene.add(skybox);
+  // console.log(envmap);
+  // /
+  // const skybox = new GroundProjectedSkybox(envMap);
+  // console.log(skybox);
 
-    scene.environment = envMap;
-  });
+  // skybox.scale.setScalar(100);
+  // scene.add(skybox);
+
+  scene.environment = envmap;
+  // });
 
   const ground = createBox(25, 0.01, 25);
   // ground.material.color = new THREE.Color(0x404040);
