@@ -27,6 +27,7 @@ function onKeyHold(key, cb) {
 }
 function onKeyDown(key, cb) {
   window.addEventListener("keydown", (e) => {
+    console.log('keydown')
     if (e.key === key) {
       cb();
     }
@@ -84,49 +85,49 @@ onInit(({ camera, renderer }) => {
 
 // Lights
 onInit(({ scene }) => {
-  const dirLight = new THREE.DirectionalLight(0xffffff, 0.5);
-  dirLight.position.y = 40;
-  dirLight.position.x = 10;
-  dirLight.position.z = 12;
+  // const dirLight = new THREE.DirectionalLight(0xffffff, 0.5);
+  // dirLight.position.y = 40;
+  // dirLight.position.x = 10;
+  // dirLight.position.z = 12;
 
-  dirLight.lookAt(0, 0, 0);
-  dirLight.castShadow = true;
+  // dirLight.lookAt(0, 0, 0);
+  // dirLight.castShadow = true;
 
-  dirLight.shadow.camera.top = -10;
-  dirLight.shadow.camera.bottom = 10;
-  dirLight.shadow.camera.left = -10;
-  dirLight.shadow.camera.right = 10;
+  // dirLight.shadow.camera.top = -10;
+  // dirLight.shadow.camera.bottom = 10;
+  // dirLight.shadow.camera.left = -10;
+  // dirLight.shadow.camera.right = 10;
 
-  dirLight.shadow.camera.near = 10;
-  dirLight.shadow.camera.far = 200;
-  dirLight.shadow.blurSamples = 30;
-  dirLight.shadow.radius = 8;
+  // dirLight.shadow.camera.near = 10;
+  // dirLight.shadow.camera.far = 200;
+  // dirLight.shadow.blurSamples = 30;
+  // dirLight.shadow.radius = 8;
 
-  onKeyHold("w", () => {
-    dirLight.position.x += 1;
-  });
-  onKeyHold("s", () => {
-    dirLight.position.x -= 1;
-  });
-  onKeyHold("q", () => {
-    dirLight.position.y += 1;
-  });
-  onKeyHold("e", () => {
-    dirLight.position.y -= 1;
-  });
-  onKeyHold("r", () => {
-    dirLight.position.z += 1;
-  });
-  onKeyHold("f", () => {
-    dirLight.position.z -= 1;
-  });
+  // onKeyHold("w", () => {
+  //   dirLight.position.x += 1;
+  // });
+  // onKeyHold("s", () => {
+  //   dirLight.position.x -= 1;
+  // });
+  // onKeyHold("q", () => {
+  //   dirLight.position.y += 1;
+  // });
+  // onKeyHold("e", () => {
+  //   dirLight.position.y -= 1;
+  // });
+  // onKeyHold("r", () => {
+  //   dirLight.position.z += 1;
+  // });
+  // onKeyHold("f", () => {
+  //   dirLight.position.z -= 1;
+  // });
 
-  onKeyDown("d", () => {
-    console.log(dirLight.position);
-  });
+  // onKeyDown("d", () => {
+  //   console.log(dirLight.position);
+  // });
 
   // scene.add(new THREE.CameraHelper(dirLight.shadow.camera));
-  scene.add(dirLight);
+  // scene.add(dirLight);
 });
 
 // Car model
@@ -134,6 +135,20 @@ let carModel;
 onInit(({ scene, camera, renderer }) => {
   new GLTFLoader().load("/porsche_911_gt2_rs_with_angle_eyes.glb", (model) => {
     carModel = model.scene;
+
+    const shadow = new THREE.TextureLoader().load('/shadow.png')
+
+  const mesh = new THREE.Mesh(
+    new THREE.PlaneGeometry( 8 * 4,7.1 * 4 ),
+    new THREE.MeshBasicMaterial( {
+      map: shadow, blending: THREE.MultiplyBlending, toneMapped: false, transparent: true
+    } )
+  );
+  mesh.rotation.x = - Math.PI / 2;
+
+  mesh.position.z = -1
+  mesh.renderOrder = 2;
+  carModel.add( mesh );
 
     carModel.traverse((obj) => {
       // if (obj.isMesh) {
@@ -164,13 +179,14 @@ onInit(async ({ scene }) => {
   // const hdrLoader = new RGBELoader();
   // const envMap = hdrLoader.load("/blouberg_sunrise_2_1k.hdr", (envmap) => {
   //   envMap.mapping = THREE.EquirectangularReflectionMapping;
-  // const exrLoader = new RGBELoader();
+  
+  const exrLoader = new RGBELoader();
   // const envMap = exrLoader.load("/piz_compressed.exr", (envmap) => {
-  // const envMap = exrLoader.load("/lake_pier_4k.hdr", (envmap) => {
+  const envMap = exrLoader.load("/forgotten_miniland_2k.hdr", (envmap) => {
   // const envmap = new THREE.TextureLoader().load("/istockphoto-3.jpg");
   // console.log(envmap);
 
-  const envmap = new THREE.TextureLoader().load("/istock1.jpg");
+  // const envmap = new THREE.TextureLoader().load("/istock1.jpg");
   // const envmap = new THREE.TextureLoader().load("/istock2.jpg");
   // const envmap = new THREE.TextureLoader().load("/istock3.jpg");
   // const envmap = new THREE.TextureLoader().load("/gettyimages-1.jpg");
@@ -190,7 +206,7 @@ onInit(async ({ scene }) => {
   // scene.add(skybox);
 
   scene.environment = envmap;
-  // });
+  });
 
   const ground = createBox(25, 0.01, 25);
   // ground.material.color = new THREE.Color(0x404040);
