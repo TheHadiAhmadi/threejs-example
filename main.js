@@ -61,7 +61,7 @@ function setCarColor(color, isMatte) {
       if (isMatte) {
         object.material.metalness = 0;
       } else {
-        object.material.metalness = 1;
+        object.material.metalness = 0.5;
       }
       object.material.color.set(color);
     }
@@ -74,8 +74,8 @@ onInit(({ camera, renderer }) => {
   controls.enableDamping = true; // an animation loop is required when either damping or auto-rotation are enabled
   controls.dampingFactor = 0.1;
   controls.screenSpacePanning = true;
-  controls.minDistance = 10;
-  controls.maxDistance = 50;
+  controls.minDistance = 5;
+  controls.maxDistance = 20;
   controls.minPolarAngle = (0.4 * Math.PI) / 2;
   controls.maxPolarAngle = (0.9 * Math.PI) / 2;
   // controls.enableZoom = false;
@@ -133,22 +133,22 @@ onInit(({ scene }) => {
 // Car model
 let carModel;
 onInit(({ scene, camera, renderer }) => {
-  new GLTFLoader().load("/porsche_911_gt2_rs_with_angle_eyes.glb", (model) => {
+  new GLTFLoader().load("/GV60.glb", (model) => {
     carModel = model.scene;
 
-    const shadow = new THREE.TextureLoader().load('/shadow.png')
+  //   const shadow = new THREE.TextureLoader().load('/shadow.png')
 
-  const mesh = new THREE.Mesh(
-    new THREE.PlaneGeometry( 8 * 4,7.1 * 4 ),
-    new THREE.MeshBasicMaterial( {
-      map: shadow, blending: THREE.MultiplyBlending, toneMapped: false, transparent: true
-    } )
-  );
-  mesh.rotation.x = - Math.PI / 2;
+  // const mesh = new THREE.Mesh(
+  //   new THREE.PlaneGeometry( 8 * 4,7.1 * 4 ),
+  //   new THREE.MeshBasicMaterial( {
+  //     map: shadow, blending: THREE.MultiplyBlending, toneMapped: false, transparent: true
+  //   } )
+  // );
+  // mesh.rotation.x = - Math.PI / 2;
 
-  mesh.position.z = -1
-  mesh.renderOrder = 2;
-  carModel.add( mesh );
+  carModel.position.x = -1
+  // mesh.renderOrder = 2;
+  // carModel.add( mesh );
 
     carModel.traverse((obj) => {
       // if (obj.isMesh) {
@@ -158,14 +158,15 @@ onInit(({ scene, camera, renderer }) => {
       if (obj.material) {
         // obj.material.metalness /= 4;
         if (obj.material.color) {
-          if (obj.material.color.getHex() === 13421772) {
+          console.log(obj.material.color.getHex())
+          if (obj.material.color.getHex() === 16777215) {
             obj.userData.isBody = true;
             // obj.material.metalness = 0.9;
           }
-          if (obj.material.color.getHex() === 14483456) {
-            obj.material.color.set("silver");
-            // object.material.metalness = 0.5;
-          }
+          // if (obj.material.color.getHex() === 14483456) {
+          //   obj.material.color.set("silver");
+          //   // object.material.metalness = 0.5;
+          // }
         }
       }
     });
@@ -228,7 +229,7 @@ onInit(async ({ scene }) => {
 
 // initialize
 onInit(({ camera }) => {
-  camera.position.z = -20;
+  camera.position.z = -10;
 
   document.querySelectorAll(".color").forEach((el) => {
     const color = el.getAttribute("data-color");
