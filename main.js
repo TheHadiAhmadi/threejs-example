@@ -74,12 +74,14 @@ onInit(({ camera, renderer }) => {
   controls.enableDamping = true; // an animation loop is required when either damping or auto-rotation are enabled
   controls.dampingFactor = 0.1;
   controls.screenSpacePanning = true;
-  controls.minDistance = 5;
-  controls.maxDistance = 20;
+  controls.minDistance = 3;
+  controls.maxDistance = 5;
   controls.minPolarAngle = (0.4 * Math.PI) / 2;
   controls.maxPolarAngle = (0.9 * Math.PI) / 2;
   // controls.enableZoom = false;
 
+  camera.position.y = 3
+  console.log(controls.distance)
   onUpdate(controls.update);
 });
 
@@ -146,7 +148,7 @@ onInit(({ scene, camera, renderer }) => {
   // );
   // mesh.rotation.x = - Math.PI / 2;
 
-  carModel.position.x = -1
+  carModel.position.x = -1.5  
   // mesh.renderOrder = 2;
   // carModel.add( mesh );
 
@@ -178,11 +180,12 @@ onInit(({ scene, camera, renderer }) => {
 // Ground
 onInit(async ({ scene }) => {
   // const hdrLoader = new RGBELoader();
-  // const envMap = hdrLoader.load("/blouberg_sunrise_2_1k.hdr", (envmap) => {
   //   envMap.mapping = THREE.EquirectangularReflectionMapping;
   
   const exrLoader = new RGBELoader();
   // const envMap = exrLoader.load("/piz_compressed.exr", (envmap) => {
+      // const envMap = exrLoader.load("/blouberg_sunrise_2_1k.hdr", (envmap) => {
+
   const envMap = exrLoader.load("/forgotten_miniland_2k.hdr", (envmap) => {
   // const envmap = new THREE.TextureLoader().load("/istockphoto-3.jpg");
   // console.log(envmap);
@@ -196,7 +199,7 @@ onInit(async ({ scene }) => {
   // scene.background = envmap;
 
   let skybox = new GroundProjectedSkybox(envmap);
-  skybox.scale.setScalar(100);
+  skybox.scale.setScalar(10);
   scene.add(skybox);
   // console.log(envmap);
   // /
