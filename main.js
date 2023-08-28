@@ -74,8 +74,9 @@ onInit(({ camera, renderer }) => {
   controls.enableDamping = true; // an animation loop is required when either damping or auto-rotation are enabled
   controls.dampingFactor = 0.1;
   controls.screenSpacePanning = true;
-  controls.minDistance = 3;
-  controls.maxDistance = 5;
+  controls.minDistance = 5;
+  controls.maxDistance = 7;
+  controls.distance = 5;
   controls.minPolarAngle = (0.4 * Math.PI) / 2;
   controls.maxPolarAngle = (0.9 * Math.PI) / 2;
   // controls.enableZoom = false;
@@ -138,19 +139,23 @@ onInit(({ scene, camera, renderer }) => {
   new GLTFLoader().load("/GV60.glb", (model) => {
     carModel = model.scene;
 
-  //   const shadow = new THREE.TextureLoader().load('/shadow.png')
+    const shadow = new THREE.TextureLoader().load('/shadow.png')
 
-  // const mesh = new THREE.Mesh(
-  //   new THREE.PlaneGeometry( 8 * 4,7.1 * 4 ),
-  //   new THREE.MeshBasicMaterial( {
-  //     map: shadow, blending: THREE.MultiplyBlending, toneMapped: false, transparent: true
-  //   } )
-  // );
-  // mesh.rotation.x = - Math.PI / 2;
+  const mesh = new THREE.Mesh(
+    // new THREE.PlaneGeometry( 8 * 4,7.1 * 4 ),
+    new THREE.PlaneGeometry( 5.1 * 2,5.2 * 2 ),
+    new THREE.MeshBasicMaterial( {
+      map: shadow, blending: THREE.MultiplyBlending, toneMapped: false, transparent: true
+    } )
+  );
+  mesh.rotation.x = - Math.PI / 2;
+  mesh.rotation.z = - Math.PI / 2;
+
+  mesh.position.x = 1.4;
+  
 
   carModel.position.x = -1.5  
   // mesh.renderOrder = 2;
-  // carModel.add( mesh );
 
     carModel.traverse((obj) => {
       // if (obj.isMesh) {
@@ -172,6 +177,8 @@ onInit(({ scene, camera, renderer }) => {
         }
       }
     });
+
+    carModel.add( mesh );
 
     scene.add(model.scene);
   });
@@ -199,7 +206,7 @@ onInit(async ({ scene }) => {
   // scene.background = envmap;
 
   let skybox = new GroundProjectedSkybox(envmap);
-  skybox.scale.setScalar(10);
+  skybox.scale.setScalar(200);
   scene.add(skybox);
   // console.log(envmap);
   // /
@@ -233,6 +240,12 @@ onInit(async ({ scene }) => {
 // initialize
 onInit(({ camera }) => {
   camera.position.z = -10;
+
+  camera.position.y = 3;
+ 
+  // camera.lookAt(0, 25, 10);
+  console.log(camera)
+  camera.rotation.y = 2;
 
   document.querySelectorAll(".color").forEach((el) => {
     const color = el.getAttribute("data-color");
